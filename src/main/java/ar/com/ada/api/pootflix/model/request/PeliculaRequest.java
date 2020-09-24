@@ -7,7 +7,7 @@ public class PeliculaRequest {
     public String premio;
     public Integer genero;
     public ObjectId idActor;
-    public Integer calificacion;
+    public Double calificacion;
     public boolean filmadaenImax;
     public Integer paisOrigen;
     public Integer anio;

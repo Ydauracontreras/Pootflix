@@ -13,11 +13,15 @@ import ar.com.ada.api.pootflix.entities.Actor;
 import ar.com.ada.api.pootflix.model.request.ActorRequest;
 import ar.com.ada.api.pootflix.model.response.GenericResponse;
 import ar.com.ada.api.pootflix.services.ActorService;
+import ar.com.ada.api.pootflix.services.SerieService;
 
 @RestController
 public class ActorController {
     @Autowired
     ActorService actorService;
+
+    @Autowired
+    SerieService serieService;
 
     @PostMapping("api/actores")
     public ResponseEntity<?> crearActor(@RequestBody ActorRequest actorR) {
@@ -56,6 +60,11 @@ public class ActorController {
             return ResponseEntity.ok(actor);
         }
 
+    }
+
+    @GetMapping("/actores/{id}/series")
+    ResponseEntity<?> seriesActor(@PathVariable ObjectId id) {
+        return ResponseEntity.ok(serieService.obtenerSeriesByActor(id));
     }
 
 }

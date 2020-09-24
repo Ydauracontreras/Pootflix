@@ -3,7 +3,7 @@ package ar.com.ada.api.pootflix.entities;
 public class Pais {
     public enum PaisEnum {
         ARGENTINA(32), ESTADOS_UNIDOS(840), VENEZUELA(862), ESPAÑA(724), AUSTRALIA(036), ISRAEL(376), REINO_UNIDO(44),
-        FRANCIA(250), NUEVA_ZELANDA(554), CHINA(156);
+        FRANCIA(250), NUEVA_ZELANDA(554), CHINA(156), CANADA(124);
 
         private final Integer value;
 

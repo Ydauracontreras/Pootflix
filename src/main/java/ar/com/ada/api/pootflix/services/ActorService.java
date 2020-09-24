@@ -24,13 +24,18 @@ public class ActorService {
     }
 
     public Actor crearActor(String nombre, String apellido, Integer edad, Integer paisOrigen, Integer nivel) {
-        Actor actor = new Actor();
-        actor.setNombre(nombre);
-        actor.setApellido(apellido);
-        actor.setEdad(edad);
-        actor.setPaisOrigen(PaisEnum.parse(paisOrigen));
-        actor.setNivel(TipoNivelEnum.parse(nivel));
-        return (grabar(actor) ? actor : null);
+        if (existeActor(nombre)) {
+            return null;
+        } else {
+            Actor actor = new Actor();
+            actor.setNombre(nombre);
+            actor.setApellido(apellido);
+            actor.setEdad(edad);
+            actor.setPaisOrigen(PaisEnum.parse(paisOrigen));
+            actor.setNivel(TipoNivelEnum.parse(nivel));
+            grabar(actor);
+            return actor;
+        }
     }
 
     public List<Actor> listarActores() {
@@ -42,4 +47,9 @@ public class ActorService {
         return (actor.isPresent() ? actor.get() : null);
     }
 
+    boolean existeActor(String nombre) {
+        Actor actor = actorRepository.findByNombre(nombre);
+        return (actor != null ? true : false);
+
+    }
 }

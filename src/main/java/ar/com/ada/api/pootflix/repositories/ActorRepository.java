@@ -9,4 +9,5 @@ import ar.com.ada.api.pootflix.entities.Actor;
 @Repository
 public interface ActorRepository extends MongoRepository<Actor, ObjectId> {
 
+    Actor findByNombre(String nombre);
 }

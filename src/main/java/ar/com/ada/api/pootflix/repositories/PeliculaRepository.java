@@ -9,4 +9,5 @@ import ar.com.ada.api.pootflix.entities.Pelicula;
 @Repository
 public interface PeliculaRepository extends MongoRepository<Pelicula, ObjectId> {
 
+    Pelicula findByTitulo(String titulo);
 }

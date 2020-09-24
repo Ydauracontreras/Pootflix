@@ -12,7 +12,7 @@ public class Contenido {
     private List<TipoGeneroEnum> generos = new ArrayList<TipoGeneroEnum>();
     private List<Actor> actores = new ArrayList<Actor>();
     private Integer paisOrigen;
-    private Integer calificacion;
+    private Double calificacion;
     private Director director;
 
     /**
@@ -75,20 +75,6 @@ public class Contenido {
     }
 
     /**
-     * @return the calificacion
-     */
-    public Integer getCalificacion() {
-        return calificacion;
-    }
-
-    /**
-     * @param calificacion the calificacion to set
-     */
-    public void setCalificacion(Integer calificacion) {
-        this.calificacion = calificacion;
-    }
-
-    /**
      * @return the generos
      */
     public List<TipoGeneroEnum> getGeneros() {
@@ -129,6 +115,20 @@ public class Contenido {
      */
     public void setDirector(Director director) {
         this.director = director;
+    }
+
+    /**
+     * @return the calificacion
+     */
+    public Double getCalificacion() {
+        return calificacion;
+    }
+
+    /**
+     * @param calificacion the calificacion to set
+     */
+    public void setCalificacion(Double calificacion) {
+        this.calificacion = calificacion;
     }
 
 }

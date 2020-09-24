@@ -9,4 +9,5 @@ import ar.com.ada.api.pootflix.entities.Director;
 @Repository
 public interface DirectorRepository extends MongoRepository<Director, ObjectId> {
 
+    Director findByNombre(String nombre);
 }

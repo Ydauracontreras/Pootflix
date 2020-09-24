@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 public class Temporada {
     public ObjectId _id;
     private List<Episodio> episodios = new ArrayList<Episodio>();
+    private Integer numero;
 
     /**
      * @return the episodios
@@ -21,6 +22,7 @@ public class Temporada {
      */
     public void setEpisodios(List<Episodio> episodios) {
         this.episodios = episodios;
+
     }
 
     /**
@@ -35,6 +37,20 @@ public class Temporada {
      */
     public void set_id(ObjectId _id) {
         this._id = _id;
+    }
+
+    /**
+     * @return the numero
+     */
+    public Integer getNumero() {
+        return numero;
+    }
+
+    /**
+     * @param numero the numero to set
+     */
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
 
 }

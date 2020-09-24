@@ -22,15 +22,25 @@ public class DirectorService {
         return true;
     }
 
+    boolean existeDirector(String nombre) {
+        Director director = directorRepository.findByNombre(nombre);
+        return (director != null ? true : false);
+    }
+
     public Director registrarDirector(String nombre, String apellido, Integer edad, Integer paisOrigen,
             Integer estilo) {
-        Director director = new Director();
-        director.setNombre(nombre);
-        director.setApellido(apellido);
-        director.setEdad(edad);
-        director.setPaisOrigen(PaisEnum.parse(paisOrigen));
-        director.setEstilo(TipoEstiloEnum.parse(estilo));
-        return (grabar(director) ? director : null);
+        if (existeDirector(nombre)) {
+            return null;
+        } else {
+            Director director = new Director();
+            director.setNombre(nombre);
+            director.setApellido(apellido);
+            director.setEdad(edad);
+            director.setPaisOrigen(PaisEnum.parse(paisOrigen));
+            director.setEstilo(TipoEstiloEnum.parse(estilo));
+            grabar(director);
+            return director;
+        }
     }
 
     public List<Director> listarDirectors() {

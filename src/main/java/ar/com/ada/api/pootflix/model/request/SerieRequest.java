@@ -7,7 +7,7 @@ public class SerieRequest {
     public String premio;
     public Integer genero;
     public ObjectId idActor;
-    public Integer calificacion;
+    public double calificacion;
     public Integer paisOrigen;
     public Integer anio;
     public ObjectId idDirector;

@@ -75,9 +75,20 @@ public class PeliculaController {
 
     }
 
+    @GetMapping("/api/peliculas/titulo/{titulo}")
+    public ResponseEntity<Pelicula> traerPeliculaPorTitulo(@PathVariable String titulo) {
+        return ResponseEntity.ok(peliculaService.buscarPorTitulo(titulo));
+    }
+
+    // /peliculas?genero=Ciencia%20Ficción
+    @GetMapping("api/peliculas/genero/{genero}")
+    public ResponseEntity<?> traerPeliculasPorGenero(@PathVariable String genero) {
+        return ResponseEntity.ok(peliculaService.buscarPorGenero(genero));
+    }
+
     @GetMapping("/api/peliculas/generos/{genero}")
     public ResponseEntity<?> obtenerPeliculaporGenero(@PathVariable Integer genero) {
         return ResponseEntity.ok(peliculaService.obtenerPeliculasPorGenero(genero));
-
     }
+
 }

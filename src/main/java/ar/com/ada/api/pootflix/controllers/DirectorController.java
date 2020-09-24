@@ -32,7 +32,7 @@ public class DirectorController {
         } else {
             r.isOk = true;
             r.id = director.get_id().toHexString();
-            r.message = "Registraste con exito la directora " + director.getNombre() + " " + director.getApellido()
+            r.message = "Registraste con exito la director " + director.getNombre() + " " + director.getApellido()
                     + " nivel " + director.getEstilo().toString();
 
             return ResponseEntity.ok(r);
@@ -58,4 +58,5 @@ public class DirectorController {
         }
 
     }
+
 }
