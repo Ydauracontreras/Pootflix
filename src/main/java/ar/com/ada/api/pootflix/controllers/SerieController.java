@@ -42,18 +42,29 @@ public class SerieController {
     @PostMapping("api/series/episodios")
     public ResponseEntity<?> registrarEpisodio(@RequestBody EpisodioRequest episodioRequest) {
         GenericResponse r = new GenericResponse();
-        Episodio episodio = serieService.registarEpisodio(episodioRequest.idSerie, episodioRequest.duracion,
-                episodioRequest.nombre, episodioRequest.numero, episodioRequest.numeroTemporada);
-        if (episodio == null) {
+        Episodio episodio = new Episodio();
+        episodio = this.serieService.obtenerEpisodioPorNroEpisodioVersionPesada(episodioRequest.idSerie,
+                episodioRequest.numeroTemporada, episodioRequest.numero);
+        if (episodio != null) {
             r.isOk = false;
-            r.message = "No se pudo registar el episodio";
+            r.message = "El episodio ya Exsite";
             return ResponseEntity.badRequest().body(r);
         } else {
-            r.isOk = true;
-            r.id = episodio.get_id().toHexString();
-            r.message = "Registraste con exito el episodio " + episodio.getNombre() + " a la serie "
-                    + serieService.obtenerSerieId(episodioRequest.idSerie).getTitulo();
-            return ResponseEntity.ok(r);
+            episodio = serieService.registarEpisodio(episodioRequest.idSerie, episodioRequest.duracion,
+                    episodioRequest.nombre, episodioRequest.numero, episodioRequest.numeroTemporada);
+            if (episodio == null) {
+                r.isOk = false;
+                r.message = "No se pudo registar el episodio";
+                return ResponseEntity.badRequest().body(r);
+            } else {
+                r.isOk = true;
+                r.id = episodio.get_id().toHexString();
+                r.message = "Registraste con exito el episodio " + episodio.getNombre() + " a la serie "
+                        + serieService.obtenerSerieId(episodioRequest.idSerie).getTitulo();
+                return ResponseEntity.ok(r);
+
+            }
+
         }
     }
 

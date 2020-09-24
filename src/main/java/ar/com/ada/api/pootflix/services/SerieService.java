@@ -71,8 +71,6 @@ public class SerieService {
 
     public Episodio registarEpisodio(ObjectId idSerie, double duracion, String nombre, Integer numero,
             Integer numeroTemporada) {
-        List<Temporada> temporadas = new ArrayList<>();
-        List<Episodio> episodios = new ArrayList<Episodio>();
         Serie serie = obtenerSerieId(idSerie);
         // Creo un episodio
         Episodio episodio = new Episodio();
@@ -81,27 +79,24 @@ public class SerieService {
         episodio.setNumero(numero);
         episodio.set_id(ObjectId.get());
         // Agrego a la lista de episodios
-        episodios.add(episodio);
-        temporadas.add(registarTemporada(episodio, numeroTemporada, idSerie));
-        serie.setTemporadas(temporadas);
+        Temporada temporada = new Temporada();
+        if (buscarTemporada(numeroTemporada, idSerie) == null) {
+            temporada = crearTemporada(episodio, numeroTemporada);
+            serie.getTemporadas().add(temporada);
+        } else {
+            // temporada = addNuevosEpTemporada(numeroTemporada, idSerie, episodio);
+            serie.setTemporadas(addNuevosEpTemporada(numeroTemporada, idSerie, episodio));
+            // temporada.getEpisodios().add(episodio);
+        }
         grabar(serie);
         return episodio;
+
     }
 
-    public Temporada registarTemporada(Episodio episodio, Integer numeroTemporada, ObjectId idSerie) {
-        Serie serie = obtenerSerieId(idSerie);
-        Temporada t = new Temporada();
-        List<Temporada> temporadas = serie.getTemporadas();
-        for (Temporada temporada : temporadas) {
-            if (temporada.getNumero().equals(numeroTemporada)) {
-                temporada.getEpisodios().add(episodio);
-            } else {
-                t = crearTemporada(episodio, numeroTemporada);
-                return t;
-            }
-        }
-        return null;
-
+    public Temporada buscarTemporada(Integer numeroTemporada, ObjectId idSerie) {
+        Optional<Temporada> temporada = this.obtenerSerieId(idSerie).getTemporadas().stream()
+                .filter(t -> t.getNumero().equals(numeroTemporada)).findFirst();
+        return (temporada.isPresent() ? temporada.get() : null);
     }
 
     public Temporada crearTemporada(Episodio episodio, Integer numeroTemporada) {
@@ -112,6 +107,20 @@ public class SerieService {
         t.setNumero(numeroTemporada);
         t.set_id(ObjectId.get());
         return t;
+    }
+
+    public List<Temporada> addNuevosEpTemporada(Integer numeroTemporada, ObjectId idSerie, Episodio episodio) {
+        List<Temporada> temp2 = new ArrayList<>();
+        List<Temporada> temporadas = traerTemporadasPorSerieId(idSerie);
+        for (Temporada temporada : temporadas) {
+            if (temporada.getNumero().equals(numeroTemporada)) {
+                temporada.getEpisodios().add(episodio);
+            }
+            temp2.add(temporada);
+        }
+
+        return temp2;
+
     }
 
     public List<Serie> listarSeries() {
@@ -137,15 +146,6 @@ public class SerieService {
         return serieRepository.findAll();
     }
 
-    public Serie buscarPorId(ObjectId idSerie) {
-        Optional<Serie> opSerie = serieRepository.findById(idSerie);
-
-        if (opSerie.isPresent())
-            return opSerie.get();
-        else
-            return null;
-    }
-
     public boolean tieneGenero(Serie serie, String genero) {
         return serie.getGeneros().stream().filter(g -> g.getValue().toString().equals(genero)).count() > 0;
     }
@@ -161,8 +161,7 @@ public class SerieService {
     }
 
     public List<Temporada> traerTemporadasPorSerieId(ObjectId id) {
-
-        return buscarPorId(id).getTemporadas();
+        return obtenerSerieId(id).getTemporadas();
     }
 
     public List<Serie> obtenerSeriesByActor(ObjectId actorId) {
@@ -185,7 +184,7 @@ public class SerieService {
 
     public List<Episodio> obtenerEpisodiosSerie(ObjectId serieId) {
 
-        return this.buscarPorId(serieId).getTemporadas().stream().map(t -> t.getEpisodios()).flatMap(List::stream)
+        return this.obtenerSerieId(serieId).getTemporadas().stream().map(t -> t.getEpisodios()).flatMap(List::stream)
                 .collect(Collectors.toList());
     }
 
@@ -196,11 +195,12 @@ public class SerieService {
     public Episodio obtenerEpisodioPorNroEpisodioVersionPesada(ObjectId serieId, Integer temporadaNro,
             Integer episodioNumero) {
 
-        Episodio episodio = serieRepository.findBy_id(serieId).getTemporadas().stream()
+        Optional<Episodio> episodio = serieRepository.findBy_id(serieId).getTemporadas().stream()
                 .filter(t -> t.getNumero() == temporadaNro).findFirst().get().getEpisodios().stream()
-                .filter(e -> e.getNumero() == episodioNumero).findFirst().get();
+                .filter(e -> e.getNumero() == episodioNumero).findFirst();
 
-        return episodio;
+        return (episodio.isPresent() ? episodio.get() : null);
+
     }
 
     public Episodio obtenerEpisodioPorNroEpisodioVersionPerfomante(ObjectId serieId, Integer temporadaNro,
